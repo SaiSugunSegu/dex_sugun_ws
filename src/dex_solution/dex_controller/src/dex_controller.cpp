@@ -292,6 +292,7 @@ void DexController::applyConstraints(
   const double & pose_cost, const nav_msgs::msg::Path & path, double & linear_vel, double & sign)
 {
   double curvature_vel = linear_vel;
+  double cost_vel = linear_vel;
 
   // limit the linear velocity by curvature
   const double radius = fabs(1.0 / curvature);
@@ -300,6 +301,22 @@ void DexController::applyConstraints(
     curvature_vel *= 1.0 - (fabs(radius - min_rad) / min_rad);
   }
 
+  // limit the linear velocity by proximity to obstacles
+  if (use_cost_regulated_linear_velocity_scaling_ &&
+    pose_cost != static_cast<double>(NO_INFORMATION) &&
+    pose_cost != static_cast<double>(FREE_SPACE))
+  {
+    const double inscribed_radius = costmap_ros_->getLayeredCostmap()->getInscribedRadius();
+    const double min_distance_to_obstacle = (-1.0 / inflation_cost_scaling_factor_) *
+      std::log(pose_cost / (INSCRIBED_INFLATED_OBSTACLE - 1)) + inscribed_radius;
+
+    if (min_distance_to_obstacle < cost_scaling_dist_) {
+      cost_vel *= cost_scaling_gain_ * min_distance_to_obstacle / cost_scaling_dist_;
+    }
+  }
+
+  // Use the lowest of the 2 constraint heuristics, but above the minimum translational speed
+  linear_vel = std::min(cost_vel, curvature_vel);
   linear_vel = std::max(linear_vel, regulated_linear_scaling_min_speed_);
 
   // Limit linear velocities to be valid

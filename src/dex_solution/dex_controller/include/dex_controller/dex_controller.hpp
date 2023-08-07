@@ -133,7 +133,9 @@ protected:
   double regulated_linear_scaling_min_speed_{0.25};
   bool use_regulated_linear_velocity_scaling_{true};
   bool use_cost_regulated_linear_velocity_scaling_{false};
-
+  double cost_scaling_gain_{1.0};
+  double cost_scaling_dist_{1.0};
+  double inflation_cost_scaling_factor_{1.0};
 
   /**
    * @brief Transforms global plan into same frame as pose and clips poses ineligible for lookaheadPoint
