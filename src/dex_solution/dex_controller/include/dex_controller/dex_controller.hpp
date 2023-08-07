@@ -129,6 +129,10 @@ protected:
   double max_angular_accel_{3.2};
   bool allow_reversing_{false};
 
+  double regulated_linear_scaling_min_radius_{0.9};
+  double regulated_linear_scaling_min_speed_{0.25};
+  bool use_regulated_linear_velocity_scaling_{true};
+  bool use_cost_regulated_linear_velocity_scaling_{false};
 
 
   /**
@@ -222,10 +226,19 @@ protected:
    */
   double costAtPose(const double & x, const double & y);
 
-  void applyApproachVelocityScaling(
-    const nav_msgs::msg::Path & path,
-    double & linear_vel
-  ) const;
+  /**
+   * @brief apply regulation constraints to the system
+   * @param linear_vel robot command linear velocity input
+   * @param lookahead_dist optimal lookahead distance
+   * @param curvature curvature of path
+   * @param speed Speed of robot
+   * @param pose_cost cost at this pose
+   */
+  void applyConstraints(
+    const double & curvature, const geometry_msgs::msg::Twist & speed,
+    const double & pose_cost, const nav_msgs::msg::Path & path,
+    double & linear_vel, double & sign);
+
 };
 
 }  // namespace dex_controller

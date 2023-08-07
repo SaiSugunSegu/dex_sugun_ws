@@ -51,7 +51,6 @@ void DexController::configure(
   node->get_parameter( plugin_name_ + ".use_interpolation", use_interpolation_);
   node->get_parameter( plugin_name_ + ".max_robot_pose_search_dist", max_robot_pose_search_dist_);
   node->get_parameter("control_duration", control_duration_);
-
   
 }
 
@@ -69,7 +68,6 @@ void DexController::deactivate()
 {
   RCLCPP_INFO( logger_, "Deactivating controller: %s of type dex_controller::DexController", plugin_name_.c_str());
 }
-
 
 bool DexController::transformPose(
   const std::string frame,
@@ -289,6 +287,26 @@ double DexController::costAtPose(const double & x, const double & y)
   return static_cast<double>(cost);
 }
 
+void DexController::applyConstraints(
+  const double & curvature, const geometry_msgs::msg::Twist & /*curr_speed*/,
+  const double & pose_cost, const nav_msgs::msg::Path & path, double & linear_vel, double & sign)
+{
+  double curvature_vel = linear_vel;
+
+  // limit the linear velocity by curvature
+  const double radius = fabs(1.0 / curvature);
+  const double & min_rad = regulated_linear_scaling_min_radius_;
+  if (use_regulated_linear_velocity_scaling_ && radius < min_rad) {
+    curvature_vel *= 1.0 - (fabs(radius - min_rad) / min_rad);
+  }
+
+  linear_vel = std::max(linear_vel, regulated_linear_scaling_min_speed_);
+
+  // Limit linear velocities to be valid
+  linear_vel = std::clamp(fabs(linear_vel), 0.0, desired_linear_vel_);
+  linear_vel = sign * linear_vel;
+}
+
 geometry_msgs::msg::TwistStamped DexController::computeVelocityCommands(
   const geometry_msgs::msg::PoseStamped & pose, const geometry_msgs::msg::Twist & velocity,
   nav2_core::GoalChecker * /*goal_checker*/)
@@ -321,6 +339,12 @@ geometry_msgs::msg::TwistStamped DexController::computeVelocityCommands(
 
   linear_vel = desired_linear_vel_;
 
+  // Setting the velocity direction
+  double sign = 1.0;
+  if (allow_reversing_) {
+    sign = goal_pose.pose.position.x >= 0.0 ? 1.0 : -1.0;
+  }
+
   // Make sure we're in compliance with basic constraints
   double angle_to_heading;
   if (shouldRotateToGoalHeading(goal_pose)) {
@@ -329,6 +353,11 @@ geometry_msgs::msg::TwistStamped DexController::computeVelocityCommands(
   } else if (shouldRotateToPath(goal_pose, angle_to_heading)) {
     rotateToHeading(linear_vel, angular_vel, angle_to_heading, velocity);
   } else {
+    applyConstraints(
+      curvature, velocity,
+      costAtPose(pose.pose.position.x, pose.pose.position.y), transformed_plan,
+      linear_vel, sign);
+
     // Apply curvature to angular velocity
     angular_vel = linear_vel * curvature;
   }
