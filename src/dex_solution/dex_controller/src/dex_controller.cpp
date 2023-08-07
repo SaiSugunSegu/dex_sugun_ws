@@ -107,7 +107,7 @@ nav_msgs::msg::Path DexController::transformGlobalPlan(
       return euclidean_distance(robot_pose, ps);
     });
 
-    // We'll discard points on the plan that are outside the local costmap
+  // We'll discard points on the plan that are outside the local costmap
   double max_costmap_extent = getCostmapMaxExtent();
 
   // Find points up to max_transform_dist so we only transform them.
@@ -147,6 +147,8 @@ geometry_msgs::msg::TwistStamped DexController::computeVelocityCommands(
 
   // Transform path to robot base frame
   auto transformed_plan = transformGlobalPlan(pose);
+
+  
 
 
   geometry_msgs::msg::TwistStamped cmd_vel;
