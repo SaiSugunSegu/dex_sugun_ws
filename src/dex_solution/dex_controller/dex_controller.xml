@@ -1,0 +1,9 @@
+<class_libraries>
+    <library path="dex_controller">
+        <class type="dex_controller::DexController" base_class_type="nav2_core::Controller">
+            <description>
+                Follows a path.
+            </description>
+        </class>
+    </library>
+</class_libraries>
