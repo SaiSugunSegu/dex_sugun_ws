@@ -112,7 +112,15 @@ protected:
   rclcpp::Clock::SharedPtr clock_;
 
   tf2::Duration transform_tolerance_;
-  double max_robot_pose_search_dist_ = 5;
+  double max_robot_pose_search_dist_;
+  double desired_linear_vel_, base_desired_linear_vel_;
+  double lookahead_dist_;
+  double rotate_to_heading_angular_vel_;
+  double max_lookahead_dist_;
+  double min_lookahead_dist_;
+  double lookahead_time_;
+  bool use_velocity_scaled_lookahead_dist_;
+  bool use_interpolation_;
 
   /**
    * @brief Transforms global plan into same frame as pose and clips poses ineligible for lookaheadPoint
@@ -147,6 +155,29 @@ protected:
    * @return lookahead distance
    */
   double getLookAheadDistance(const geometry_msgs::msg::Twist &);
+
+  /**
+   * @brief Find the intersection a circle and a line segment.
+   * This assumes the circle is centered at the origin.
+   * If no intersection is found, a floating point error will occur.
+   * @param p1 first endpoint of line segment
+   * @param p2 second endpoint of line segment
+   * @param r radius of circle
+   * @return point of intersection
+   */
+  static geometry_msgs::msg::Point circleSegmentIntersection(
+    const geometry_msgs::msg::Point & p1,
+    const geometry_msgs::msg::Point & p2,
+    double r);
+
+  /**
+   * @brief Get lookahead point
+   * @param lookahead_dist Optimal lookahead distance
+   * @param path Current global path
+   * @return Lookahead point
+   */
+  geometry_msgs::msg::PoseStamped getLookAheadPoint(const double &, const nav_msgs::msg::Path &);
+
 
 };
 

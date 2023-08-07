@@ -1,0 +1,27 @@
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In member function ‘[01m[Kdouble dex_controller::DexController::getLookAheadDistance(const Twist&)[m[K’:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:148:27:[m[K [01;31m[Kerror: [m[K‘[01m[Klookahead_dist_[m[K’ was not declared in this scope; did you mean ‘[01m[Klookahead_dist[m[K’?
+  148 |   double lookahead_dist = [01;31m[Klookahead_dist_[m[K;
+      |                           [01;31m[K^~~~~~~~~~~~~~~[m[K
+      |                           [32m[Klookahead_dist[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:149:7:[m[K [01;31m[Kerror: [m[K‘[01m[Kuse_velocity_scaled_lookahead_dist_[m[K’ was not declared in this scope
+  149 |   if ([01;31m[Kuse_velocity_scaled_lookahead_dist_[m[K) {
+      |       [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:150:45:[m[K [01;31m[Kerror: [m[K‘[01m[Klookahead_time_[m[K’ was not declared in this scope; did you mean ‘[01m[Klookahead_dist[m[K’?
+  150 |     lookahead_dist = fabs(speed.linear.x) * [01;31m[Klookahead_time_[m[K;
+      |                                             [01;31m[K^~~~~~~~~~~~~~~[m[K
+      |                                             [32m[Klookahead_dist[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:151:49:[m[K [01;31m[Kerror: [m[K‘[01m[Kmin_lookahead_dist_[m[K’ was not declared in this scope; did you mean ‘[01m[Klookahead_dist[m[K’?
+  151 |     lookahead_dist = std::clamp(lookahead_dist, [01;31m[Kmin_lookahead_dist_[m[K, max_lookahead_dist_);
+      |                                                 [01;31m[K^~~~~~~~~~~~~~~~~~~[m[K
+      |                                                 [32m[Klookahead_dist[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:151:70:[m[K [01;31m[Kerror: [m[K‘[01m[Kmax_lookahead_dist_[m[K’ was not declared in this scope; did you mean ‘[01m[Klookahead_dist[m[K’?
+  151 |     lookahead_dist = std::clamp(lookahead_dist, min_lookahead_dist_, [01;31m[Kmax_lookahead_dist_[m[K);
+      |                                                                      [01;31m[K^~~~~~~~~~~~~~~~~~~[m[K
+      |                                                                      [32m[Klookahead_dist[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In member function ‘[01m[Kgeometry_msgs::msg::PoseStamped dex_controller::DexController::getLookAheadPoint(const double&, const Path&)[m[K’:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:201:12:[m[K [01;31m[Kerror: [m[K‘[01m[Kuse_interpolation_[m[K’ was not declared in this scope
+  201 |   else if ([01;31m[Kuse_interpolation_[m[K && goal_pose_it != transformed_plan.poses.begin())
+      |            [01;31m[K^~~~~~~~~~~~~~~~~~[m[K
+gmake[2]: *** [CMakeFiles/dex_controller.dir/build.make:76: CMakeFiles/dex_controller.dir/src/dex_controller.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/dex_controller.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

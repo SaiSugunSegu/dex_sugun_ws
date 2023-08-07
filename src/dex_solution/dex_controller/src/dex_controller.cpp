@@ -41,6 +41,17 @@ void DexController::configure(
 
   double transform_tolerance = 0.1;
   transform_tolerance_ = tf2::durationFromSec(transform_tolerance);
+
+  node->get_parameter(plugin_name_ + ".desired_linear_vel", desired_linear_vel_);
+  base_desired_linear_vel_ = desired_linear_vel_;
+  node->get_parameter(plugin_name_ + ".lookahead_dist", lookahead_dist_);
+  node->get_parameter(plugin_name_ + ".min_lookahead_dist", min_lookahead_dist_);
+  node->get_parameter(plugin_name_ + ".max_lookahead_dist", max_lookahead_dist_);
+  node->get_parameter(plugin_name_ + ".lookahead_time", lookahead_time_);
+  node->get_parameter(plugin_name_ + ".use_velocity_scaled_lookahead_dist", use_velocity_scaled_lookahead_dist_);
+  node->get_parameter( plugin_name_ + ".use_interpolation", use_interpolation_);
+  node->get_parameter( plugin_name_ + ".max_robot_pose_search_dist", max_robot_pose_search_dist_);
+    
 }
 
 void DexController::cleanup() 
@@ -89,26 +100,32 @@ double DexController::getCostmapMaxExtent() const
 nav_msgs::msg::Path DexController::transformGlobalPlan(
   const geometry_msgs::msg::PoseStamped & pose)
 {
-  
-  // First find the closest pose on the path to the robot
-  // bounded by when the path turns around (if it does) so we don't get a pose from a later
-  // portion of the path
+  if (global_plan_.poses.empty()) {
+    throw nav2_core::PlannerException("Received plan with zero length");
+  }
 
+  // let's get the pose of the robot in the frame of the plan
   geometry_msgs::msg::PoseStamped robot_pose;
+  if (!transformPose(global_plan_.header.frame_id, pose, robot_pose)) {
+    throw nav2_core::PlannerException("Unable to transform robot pose into global plan's frame");
+  }
+
+  // We'll discard points on the plan that are outside the local costmap
+  double max_costmap_extent = getCostmapMaxExtent();
 
   auto closest_pose_upper_bound =
     nav2_util::geometry_utils::first_after_integrated_distance(
     global_plan_.poses.begin(), global_plan_.poses.end(), max_robot_pose_search_dist_);
 
+  // First find the closest pose on the path to the robot
+  // bounded by when the path turns around (if it does) so we don't get a pose from a later
+  // portion of the path
   auto transformation_begin =
     nav2_util::geometry_utils::min_by(
     global_plan_.poses.begin(), closest_pose_upper_bound,
     [&robot_pose](const geometry_msgs::msg::PoseStamped & ps) {
       return euclidean_distance(robot_pose, ps);
     });
-
-  // We'll discard points on the plan that are outside the local costmap
-  double max_costmap_extent = getCostmapMaxExtent();
 
   // Find points up to max_transform_dist so we only transform them.
   auto transformation_end = std::find_if(
@@ -137,6 +154,14 @@ nav_msgs::msg::Path DexController::transformGlobalPlan(
   transformed_plan.header.frame_id = costmap_ros_->getBaseFrameID();
   transformed_plan.header.stamp = robot_pose.header.stamp;
 
+  // Remove the portion of the global plan that we've already passed so we don't
+  // process it on the next iteration (this is called path pruning)
+  global_plan_.poses.erase(begin(global_plan_.poses), transformation_begin);
+
+  if (transformed_plan.poses.empty()) {
+    throw nav2_core::PlannerException("Resulting plan has 0 poses in it.");
+  }
+
   return transformed_plan;
 }
 
@@ -154,6 +179,66 @@ double DexController::getLookAheadDistance(
   return lookahead_dist;
 }
 
+geometry_msgs::msg::Point DexController::circleSegmentIntersection(
+  const geometry_msgs::msg::Point & p1,
+  const geometry_msgs::msg::Point & p2,
+  double r)
+{
+  double x1 = p1.x;
+  double x2 = p2.x;
+  double y1 = p1.y;
+  double y2 = p2.y;
+
+  double dx = x2 - x1;
+  double dy = y2 - y1;
+  double dr2 = dx * dx + dy * dy;
+  double D = x1 * y2 - x2 * y1;
+
+  // Augmentation to only return point within segment
+  double d1 = x1 * x1 + y1 * y1;
+  double d2 = x2 * x2 + y2 * y2;
+  double dd = d2 - d1;
+
+  geometry_msgs::msg::Point p;
+  double sqrt_term = std::sqrt(r * r * dr2 - D * D);
+  p.x = (D * dy + std::copysign(1.0, dd) * dx * sqrt_term) / dr2;
+  p.y = (-D * dx + std::copysign(1.0, dd) * dy * sqrt_term) / dr2;
+
+  return p;
+}
+  
+
+geometry_msgs::msg::PoseStamped DexController::getLookAheadPoint(
+  const double & lookahead_dist,
+  const nav_msgs::msg::Path & transformed_plan)
+{
+  // Find the first pose which is at a distance greater than the lookahead distance
+  auto goal_pose_it = std::find_if(
+    transformed_plan.poses.begin(), transformed_plan.poses.end(), [&](const auto & ps) {
+      return hypot(ps.pose.position.x, ps.pose.position.y) >= lookahead_dist;
+    });
+
+  // If the no pose is not far enough, take the last pose
+  if (goal_pose_it == transformed_plan.poses.end()) 
+  {
+    goal_pose_it = std::prev(transformed_plan.poses.end());
+  } 
+  else if (use_interpolation_ && goal_pose_it != transformed_plan.poses.begin()) 
+  {
+    auto prev_pose_it = std::prev(goal_pose_it);
+    auto point = circleSegmentIntersection(
+      prev_pose_it->pose.position,
+      goal_pose_it->pose.position, lookahead_dist);
+    geometry_msgs::msg::PoseStamped pose;
+    pose.header.frame_id = prev_pose_it->header.frame_id;
+    pose.header.stamp = goal_pose_it->header.stamp;
+    pose.pose.position = point;
+    return pose;
+  }
+
+  return *goal_pose_it;
+}
+
 geometry_msgs::msg::TwistStamped DexController::computeVelocityCommands(
   const geometry_msgs::msg::PoseStamped & pose, const geometry_msgs::msg::Twist & velocity,
   nav2_core::GoalChecker * /*goal_checker*/)
@@ -162,9 +247,14 @@ geometry_msgs::msg::TwistStamped DexController::computeVelocityCommands(
   // Transform path to robot base frame
   auto transformed_plan = transformGlobalPlan(pose);
 
-  // Find look ahead distance and point on path and publish
+  // Find look ahead distance and point on path
   double lookahead_dist = getLookAheadDistance(velocity);
 
+  // Find look ahead Point (goal point)
+  auto goal_pose = getLookAheadPoint(lookahead_dist, transformed_plan);
+
+
+  RCLCPP_INFO( logger_, "Lookahead dist: %f" , lookahead_dist);
 
   geometry_msgs::msg::TwistStamped cmd_vel;
   return cmd_vel;

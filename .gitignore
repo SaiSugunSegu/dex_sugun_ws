@@ -1,4 +1,4 @@
 # files generated from build
-/build
-/install 
-/log
+./build
+./install 
+./log

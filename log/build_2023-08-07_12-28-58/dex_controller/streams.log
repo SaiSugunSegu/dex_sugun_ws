@@ -1,0 +1,11 @@
+[0.007s] Invoking command in '/home/mz/auto-exercise/dex_sugun_ws/build/dex_controller': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/mz/auto-exercise/dex_sugun_ws/build/dex_controller -- -j24 -l24
+[0.030s] [35m[1mConsolidate compiler generated dependencies of target dex_controller[0m
+[0.043s] [ 50%] [32mBuilding CXX object CMakeFiles/dex_controller.dir/src/dex_controller.cpp.o[0m
+[1.868s] [01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In member function ‘[01m[Kgeometry_msgs::msg::PoseStamped dex_controller::DexController::getLookAheadPoint(const double&, const Path&)[m[K’:
+[1.868s] [01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:209:12:[m[K [01;31m[Kerror: [m[K‘[01m[Kuse_interpolation_[m[K’ was not declared in this scope
+[1.868s]   209 |   else if ([01;31m[Kuse_interpolation_[m[K && goal_pose_it != transformed_plan.poses.begin())
+[1.868s]       |            [01;31m[K^~~~~~~~~~~~~~~~~~[m[K
+[2.703s] gmake[2]: *** [CMakeFiles/dex_controller.dir/build.make:76: CMakeFiles/dex_controller.dir/src/dex_controller.cpp.o] Error 1
+[2.703s] gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/dex_controller.dir/all] Error 2
+[2.703s] gmake: *** [Makefile:146: all] Error 2
+[2.704s] Invoked command in '/home/mz/auto-exercise/dex_sugun_ws/build/dex_controller' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/mz/auto-exercise/dex_sugun_ws/build/dex_controller -- -j24 -l24
