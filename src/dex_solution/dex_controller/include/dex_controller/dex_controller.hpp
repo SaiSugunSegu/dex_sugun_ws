@@ -141,6 +141,13 @@ protected:
    */
   double getCostmapMaxExtent() const;
 
+  /**
+   * @brief Get lookahead distance
+   * @param cmd the current speed to use to compute lookahead point
+   * @return lookahead distance
+   */
+  double getLookAheadDistance(const geometry_msgs::msg::Twist &);
+
 };
 
 }  // namespace dex_controller

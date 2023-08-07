@@ -140,15 +140,30 @@ nav_msgs::msg::Path DexController::transformGlobalPlan(
   return transformed_plan;
 }
 
+double DexController::getLookAheadDistance(
+  const geometry_msgs::msg::Twist & speed)
+{
+  // If using velocity-scaled look ahead distances, find and clamp the dist
+  // Else, use the static look ahead distance
+  double lookahead_dist = lookahead_dist_;
+  if (use_velocity_scaled_lookahead_dist_) {
+    lookahead_dist = fabs(speed.linear.x) * lookahead_time_;
+    lookahead_dist = std::clamp(lookahead_dist, min_lookahead_dist_, max_lookahead_dist_);
+  }
+
+  return lookahead_dist;
+}
+
 geometry_msgs::msg::TwistStamped DexController::computeVelocityCommands(
-  const geometry_msgs::msg::PoseStamped & pose, const geometry_msgs::msg::Twist & /*speed*/,
+  const geometry_msgs::msg::PoseStamped & pose, const geometry_msgs::msg::Twist & velocity,
   nav2_core::GoalChecker * /*goal_checker*/)
 {
 
   // Transform path to robot base frame
   auto transformed_plan = transformGlobalPlan(pose);
 
-  
+  // Find look ahead distance and point on path and publish
+  double lookahead_dist = getLookAheadDistance(velocity);
 
 
   geometry_msgs::msg::TwistStamped cmd_vel;
