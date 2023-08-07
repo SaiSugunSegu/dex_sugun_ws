@@ -114,6 +114,7 @@ protected:
   tf2::Duration transform_tolerance_;
   double max_robot_pose_search_dist_{10.0};
   double desired_linear_vel_{0.5};
+  double base_desired_linear_vel_{};
   double lookahead_dist_{0.6};
   double rotate_to_heading_angular_vel_{1.8};
   double max_lookahead_dist_{0.9};
@@ -121,6 +122,14 @@ protected:
   double lookahead_time_{1.5};
   bool use_velocity_scaled_lookahead_dist_{false};
   bool use_interpolation_{false};
+  bool use_rotate_to_heading_{true};
+  double rotate_to_heading_min_angle_{0.8};
+  double goal_dist_tol_{0.25};
+  double control_duration_{0.05};
+  double max_angular_accel_{3.2};
+  bool allow_reversing_{false};
+
+
 
   /**
    * @brief Transforms global plan into same frame as pose and clips poses ineligible for lookaheadPoint
@@ -178,7 +187,45 @@ protected:
    */
   geometry_msgs::msg::PoseStamped getLookAheadPoint(const double &, const nav_msgs::msg::Path &);
 
+  /**
+   * @brief Whether robot should rotate to rough path heading
+   * @param goal_pose current lookahead point
+   * @param angle_to_path Angle of robot output relatie to goal marker
+   * @return Whether should rotate to path heading
+   */
+  bool shouldRotateToPath(
+    const geometry_msgs::msg::PoseStamped & goal_pose, double & angle_to_path);
 
+  /**
+   * @brief Whether robot should rotate to final goal orientation
+   * @param goal_pose current lookahead point
+   * @return Whether should rotate to goal heading
+   */
+  bool shouldRotateToGoalHeading(const geometry_msgs::msg::PoseStamped & goal_pose);
+
+  /**
+   * @brief Create a smooth and kinematically smoothed rotation command
+   * @param linear_vel linear velocity
+   * @param angular_vel angular velocity
+   * @param angle_to_path Angle of robot output relatie to goal marker
+   * @param curr_speed the current robot speed
+   */
+  void rotateToHeading(
+    double & linear_vel, double & angular_vel,
+    const double & angle_to_path, const geometry_msgs::msg::Twist & curr_speed);
+
+  /**
+   * @brief Cost at a point
+   * @param x Pose of pose x
+   * @param y Pose of pose y
+   * @return Cost of pose in costmap
+   */
+  double costAtPose(const double & x, const double & y);
+
+  void applyApproachVelocityScaling(
+    const nav_msgs::msg::Path & path,
+    double & linear_vel
+  ) const;
 };
 
 }  // namespace dex_controller

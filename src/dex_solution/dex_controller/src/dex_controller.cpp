@@ -50,7 +50,9 @@ void DexController::configure(
   node->get_parameter(plugin_name_ + ".use_velocity_scaled_lookahead_dist", use_velocity_scaled_lookahead_dist_);
   node->get_parameter( plugin_name_ + ".use_interpolation", use_interpolation_);
   node->get_parameter( plugin_name_ + ".max_robot_pose_search_dist", max_robot_pose_search_dist_);
-    
+  node->get_parameter("control_duration", control_duration_);
+
+  
 }
 
 void DexController::cleanup() 
@@ -205,7 +207,6 @@ geometry_msgs::msg::Point DexController::circleSegmentIntersection(
 
   return p;
 }
-  
 
 geometry_msgs::msg::PoseStamped DexController::getLookAheadPoint(
   const double & lookahead_dist,
@@ -236,6 +237,56 @@ geometry_msgs::msg::PoseStamped DexController::getLookAheadPoint(
   }
 
   return *goal_pose_it;
+}
+
+bool DexController::shouldRotateToPath(
+  const geometry_msgs::msg::PoseStamped & goal_pose, double & angle_to_path)
+{
+  // Whether we should rotate robot to rough path heading
+  angle_to_path = atan2(goal_pose.pose.position.y, goal_pose.pose.position.x);
+  return use_rotate_to_heading_ && fabs(angle_to_path) > rotate_to_heading_min_angle_;
+}
+
+bool DexController::shouldRotateToGoalHeading(
+  const geometry_msgs::msg::PoseStamped & goal_pose)
+{
+  // Whether we should rotate robot to goal heading
+  double dist_to_goal = std::hypot(goal_pose.pose.position.x, goal_pose.pose.position.y);
+  return use_rotate_to_heading_ && dist_to_goal < goal_dist_tol_;
+}
+
+void DexController::rotateToHeading(
+  double & linear_vel, double & angular_vel,
+  const double & angle_to_path, const geometry_msgs::msg::Twist & curr_speed)
+{
+  // Rotate in place using max angular velocity / acceleration possible
+  linear_vel = 0.0;
+  const double sign = angle_to_path > 0.0 ? 1.0 : -1.0;
+  angular_vel = sign * rotate_to_heading_angular_vel_;
+
+  const double & dt = control_duration_;
+  const double min_feasible_angular_speed = curr_speed.angular.z - max_angular_accel_ * dt;
+  const double max_feasible_angular_speed = curr_speed.angular.z + max_angular_accel_ * dt;
+  angular_vel = std::clamp(angular_vel, min_feasible_angular_speed, max_feasible_angular_speed);
+}
+
+
+double DexController::costAtPose(const double & x, const double & y)
+{
+  unsigned int mx, my;
+
+  if (!costmap_->worldToMap(x, y, mx, my)) {
+    RCLCPP_FATAL(
+      logger_,
+      "The dimensions of the costmap is too small to fully include your robot's footprint, "
+      "thusly the robot cannot proceed further");
+    throw nav2_core::PlannerException(
+            "DexController: Dimensions of the costmap are too small "
+            "to encapsulate the robot footprint at current speeds!");
+  }
+
+  unsigned char cost = costmap_->getCost(mx, my);
+  return static_cast<double>(cost);
 }
 
 geometry_msgs::msg::TwistStamped DexController::computeVelocityCommands(
@@ -269,8 +320,18 @@ geometry_msgs::msg::TwistStamped DexController::computeVelocityCommands(
   double linear_vel, angular_vel;
 
   linear_vel = desired_linear_vel_;
-  angular_vel = linear_vel * curvature;
 
+  // Make sure we're in compliance with basic constraints
+  double angle_to_heading;
+  if (shouldRotateToGoalHeading(goal_pose)) {
+    double angle_to_goal = tf2::getYaw(transformed_plan.poses.back().pose.orientation);
+    rotateToHeading(linear_vel, angular_vel, angle_to_goal, velocity);
+  } else if (shouldRotateToPath(goal_pose, angle_to_heading)) {
+    rotateToHeading(linear_vel, angular_vel, angle_to_heading, velocity);
+  } else {
+    // Apply curvature to angular velocity
+    angular_vel = linear_vel * curvature;
+  }
 
   RCLCPP_INFO( logger_, "Goal dist: %f, Linear Velocity: %f, Angular Velocity: %f" , goal_dist2, linear_vel, angular_vel);
 
