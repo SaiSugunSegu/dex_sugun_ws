@@ -43,7 +43,6 @@ void DexController::configure(
   transform_tolerance_ = tf2::durationFromSec(transform_tolerance);
 
   node->get_parameter(plugin_name_ + ".desired_linear_vel", desired_linear_vel_);
-  base_desired_linear_vel_ = desired_linear_vel_;
   node->get_parameter(plugin_name_ + ".lookahead_dist", lookahead_dist_);
   node->get_parameter(plugin_name_ + ".min_lookahead_dist", min_lookahead_dist_);
   node->get_parameter(plugin_name_ + ".max_lookahead_dist", max_lookahead_dist_);
@@ -244,18 +243,17 @@ geometry_msgs::msg::TwistStamped DexController::computeVelocityCommands(
   nav2_core::GoalChecker * /*goal_checker*/)
 {
 
-  // Transform path to robot base frame
+  // Step 1: Transform path to robot base frame
   auto transformed_plan = transformGlobalPlan(pose);
 
-  // Find look ahead distance and point on path
+  // Step 2: Find look ahead distance and point on path
   double lookahead_dist = getLookAheadDistance(velocity);
 
   // Find look ahead Point (goal point)
   auto goal_pose = getLookAheadPoint(lookahead_dist, transformed_plan);
 
-  double linear_vel, angular_vel;
 
-  // Calculating Goal distance assuming Robot as (0,0)
+  // Step 3 : Calculating Goal distance assuming Robot as (0,0)
   const double goal_dist2 =
     (goal_pose.pose.position.x * goal_pose.pose.position.x) +
     (goal_pose.pose.position.y * goal_pose.pose.position.y);
@@ -266,12 +264,21 @@ geometry_msgs::msg::TwistStamped DexController::computeVelocityCommands(
     curvature = 2.0 * goal_pose.pose.position.y / goal_dist2;
   }
 
-  
+  // Step 4 : apply control 
+
+  double linear_vel, angular_vel;
+
+  linear_vel = desired_linear_vel_;
+  angular_vel = linear_vel * curvature;
 
 
-  RCLCPP_INFO( logger_, "Lookahead dist: %f" , lookahead_dist);
+  RCLCPP_INFO( logger_, "Goal dist: %f, Linear Velocity: %f, Angular Velocity: %f" , goal_dist2, linear_vel, angular_vel);
 
+  // populate and return message
   geometry_msgs::msg::TwistStamped cmd_vel;
+  cmd_vel.header = pose.header;
+  cmd_vel.twist.linear.x = linear_vel;
+  cmd_vel.twist.angular.z = angular_vel;
   return cmd_vel;
 }
 

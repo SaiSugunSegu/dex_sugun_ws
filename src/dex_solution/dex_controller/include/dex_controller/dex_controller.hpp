@@ -112,15 +112,15 @@ protected:
   rclcpp::Clock::SharedPtr clock_;
 
   tf2::Duration transform_tolerance_;
-  double max_robot_pose_search_dist_;
-  double desired_linear_vel_, base_desired_linear_vel_;
-  double lookahead_dist_;
-  double rotate_to_heading_angular_vel_;
-  double max_lookahead_dist_;
-  double min_lookahead_dist_;
-  double lookahead_time_;
-  bool use_velocity_scaled_lookahead_dist_;
-  bool use_interpolation_;
+  double max_robot_pose_search_dist_{10.0};
+  double desired_linear_vel_{0.5};
+  double lookahead_dist_{0.6};
+  double rotate_to_heading_angular_vel_{1.8};
+  double max_lookahead_dist_{0.9};
+  double min_lookahead_dist_{0.3};
+  double lookahead_time_{1.5};
+  bool use_velocity_scaled_lookahead_dist_{false};
+  bool use_interpolation_{false};
 
   /**
    * @brief Transforms global plan into same frame as pose and clips poses ineligible for lookaheadPoint
