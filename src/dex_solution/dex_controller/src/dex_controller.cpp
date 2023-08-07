@@ -93,7 +93,7 @@ nav_msgs::msg::Path DexController::transformGlobalPlan(
   // First find the closest pose on the path to the robot
   // bounded by when the path turns around (if it does) so we don't get a pose from a later
   // portion of the path
-  
+
   geometry_msgs::msg::PoseStamped robot_pose;
 
   auto closest_pose_upper_bound =
