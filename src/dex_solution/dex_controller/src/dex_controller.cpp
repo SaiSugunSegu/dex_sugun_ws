@@ -253,6 +253,21 @@ geometry_msgs::msg::TwistStamped DexController::computeVelocityCommands(
   // Find look ahead Point (goal point)
   auto goal_pose = getLookAheadPoint(lookahead_dist, transformed_plan);
 
+  double linear_vel, angular_vel;
+
+  // Calculating Goal distance assuming Robot as (0,0)
+  const double goal_dist2 =
+    (goal_pose.pose.position.x * goal_pose.pose.position.x) +
+    (goal_pose.pose.position.y * goal_pose.pose.position.y);
+
+  // Find curvature of circle (k = 1 / R)
+  double curvature = 0.0;
+  if (goal_dist2 > 0.001) {
+    curvature = 2.0 * goal_pose.pose.position.y / goal_dist2;
+  }
+
+  
+
 
   RCLCPP_INFO( logger_, "Lookahead dist: %f" , lookahead_dist);
 

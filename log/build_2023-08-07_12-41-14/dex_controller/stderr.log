@@ -1,0 +1,14 @@
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In member function ‘[01m[Kvirtual geometry_msgs::msg::TwistStamped dex_controller::DexController::computeVelocityCommands(const PoseStamped&, const Twist&, nav2_core::GoalChecker*)[m[K’:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:256:10:[m[K [01;31m[Kerror: [m[Kunused variable ‘[01m[Klinear_vel[m[K’ [[01;31m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Werror=unused-variable]8;;[m[K]
+  256 |   double [01;31m[Klinear_vel[m[K, angular_vel;
+      |          [01;31m[K^~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:256:22:[m[K [01;31m[Kerror: [m[Kunused variable ‘[01m[Kangular_vel[m[K’ [[01;31m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Werror=unused-variable]8;;[m[K]
+  256 |   double linear_vel, [01;31m[Kangular_vel[m[K;
+      |                      [01;31m[K^~~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:264:10:[m[K [01;31m[Kerror: [m[Kvariable ‘[01m[Kcurvature[m[K’ set but not used [[01;31m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-but-set-variable-Werror=unused-but-set-variable]8;;[m[K]
+  264 |   double [01;31m[Kcurvature[m[K = 0.0;
+      |          [01;31m[K^~~~~~~~~[m[K
+cc1plus: all warnings being treated as errors
+gmake[2]: *** [CMakeFiles/dex_controller.dir/build.make:76: CMakeFiles/dex_controller.dir/src/dex_controller.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/dex_controller.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2
