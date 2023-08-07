@@ -1,9 +1,0 @@
-[35m[1mConsolidate compiler generated dependencies of target dex_controller[0m
-[ 50%] [32mBuilding CXX object CMakeFiles/dex_controller.dir/src/dex_controller.cpp.o[0m
-[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In member function ‘[01m[Knav_msgs::msg::Path dex_controller::DexController::transformGlobalPlan(const PoseStamped&)[m[K’:
-[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:160:3:[m[K [01;31m[Kerror: [m[K‘[01m[Kglobal_path_pub_[m[K’ was not declared in this scope
-  160 |   [01;31m[Kglobal_path_pub_[m[K->publish(transformed_plan);
-      |   [01;31m[K^~~~~~~~~~~~~~~~[m[K
-gmake[2]: *** [CMakeFiles/dex_controller.dir/build.make:76: CMakeFiles/dex_controller.dir/src/dex_controller.cpp.o] Error 1
-gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/dex_controller.dir/all] Error 2
-gmake: *** [Makefile:146: all] Error 2

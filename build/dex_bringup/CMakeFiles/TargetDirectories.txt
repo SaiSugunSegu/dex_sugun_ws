@@ -1,9 +1,0 @@
-/home/mz/auto-exercise/dex_sugun_ws/build/dex_bringup/CMakeFiles/uninstall.dir
-/home/mz/auto-exercise/dex_sugun_ws/build/dex_bringup/CMakeFiles/dex_bringup_uninstall.dir
-/home/mz/auto-exercise/dex_sugun_ws/build/dex_bringup/CMakeFiles/test.dir
-/home/mz/auto-exercise/dex_sugun_ws/build/dex_bringup/CMakeFiles/edit_cache.dir
-/home/mz/auto-exercise/dex_sugun_ws/build/dex_bringup/CMakeFiles/rebuild_cache.dir
-/home/mz/auto-exercise/dex_sugun_ws/build/dex_bringup/CMakeFiles/list_install_components.dir
-/home/mz/auto-exercise/dex_sugun_ws/build/dex_bringup/CMakeFiles/install.dir
-/home/mz/auto-exercise/dex_sugun_ws/build/dex_bringup/CMakeFiles/install/local.dir
-/home/mz/auto-exercise/dex_sugun_ws/build/dex_bringup/CMakeFiles/install/strip.dir

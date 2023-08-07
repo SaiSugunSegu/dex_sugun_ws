@@ -1,1 +1,0 @@
-/home/mz/auto-exercise/dex_sugun_ws/build/dex_bringup/ament_cmake_environment_hooks/local_setup.sh

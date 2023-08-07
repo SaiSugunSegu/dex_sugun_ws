@@ -1,4 +1,0 @@
-Invoking command in '/home/mz/auto-exercise/dex_sugun_ws/build/dex_controller': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/mz/auto-exercise/dex_sugun_ws/build/dex_controller -- -j24 -l24
-Invoked command in '/home/mz/auto-exercise/dex_sugun_ws/build/dex_controller' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/mz/auto-exercise/dex_sugun_ws/build/dex_controller -- -j24 -l24
-Invoking command in '/home/mz/auto-exercise/dex_sugun_ws/build/dex_controller': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/mz/auto-exercise/dex_sugun_ws/build/dex_controller
-Invoked command in '/home/mz/auto-exercise/dex_sugun_ws/build/dex_controller' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/mz/auto-exercise/dex_sugun_ws/build/dex_controller
