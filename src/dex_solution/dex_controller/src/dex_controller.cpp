@@ -51,6 +51,10 @@ void DexController::configure(
   node->get_parameter( plugin_name_ + ".use_interpolation", use_interpolation_);
   node->get_parameter( plugin_name_ + ".max_robot_pose_search_dist", max_robot_pose_search_dist_);
   node->get_parameter("control_duration", control_duration_);
+
+  // initialize collision checker and set costmap
+  collision_checker_ = std::make_unique<nav2_costmap_2d::FootprintCollisionChecker<nav2_costmap_2d::Costmap2D *>>(costmap_);
+  collision_checker_->setCostmap(costmap_);
   
 }
 
@@ -324,6 +328,101 @@ void DexController::applyConstraints(
   linear_vel = sign * linear_vel;
 }
 
+bool DexController::isCollisionImminent(
+  const geometry_msgs::msg::PoseStamped & robot_pose,
+  const double & linear_vel, const double & angular_vel,
+  const double & goal_dist)
+{
+  
+  // check current point is OK
+  if (inCollision(
+      robot_pose.pose.position.x, robot_pose.pose.position.y,
+      tf2::getYaw(robot_pose.pose.orientation)))
+  {
+    return true;
+  }
+
+  // visualization messages
+  nav_msgs::msg::Path arc_pts_msg;
+  arc_pts_msg.header.frame_id = costmap_ros_->getGlobalFrameID();
+  arc_pts_msg.header.stamp = robot_pose.header.stamp;
+  geometry_msgs::msg::PoseStamped pose_msg;
+  pose_msg.header.frame_id = arc_pts_msg.header.frame_id;
+  pose_msg.header.stamp = arc_pts_msg.header.stamp;
+
+  double projection_time = 0.0;
+  if (fabs(linear_vel) < 0.01 && fabs(angular_vel) > 0.01) {
+    double max_radius = costmap_ros_->getLayeredCostmap()->getCircumscribedRadius();
+    projection_time =
+      2.0 * sin((costmap_->getResolution() / 2) / max_radius) / fabs(angular_vel);
+  } else {
+    // Normal path tracking
+    projection_time = costmap_->getResolution() / fabs(linear_vel);
+  }
+
+  const geometry_msgs::msg::Point & robot_xy = robot_pose.pose.position;
+  geometry_msgs::msg::Pose2D curr_pose;
+  curr_pose.x = robot_pose.pose.position.x;
+  curr_pose.y = robot_pose.pose.position.y;
+  curr_pose.theta = tf2::getYaw(robot_pose.pose.orientation);
+
+  // only forward simulate within time requested
+  int i = 1;
+  while (i * projection_time < max_allowed_time_to_collision_up_to_goal_) {
+    i++;
+
+    // apply velocity at curr_pose over distance
+    curr_pose.x += projection_time * (linear_vel * cos(curr_pose.theta));
+    curr_pose.y += projection_time * (linear_vel * sin(curr_pose.theta));
+    curr_pose.theta += projection_time * angular_vel;
+
+    // check if past goal pose, where no longer a thoughtfully valid command
+    if (hypot(curr_pose.x - robot_xy.x, curr_pose.y - robot_xy.y) > goal_dist) {
+      break;
+    }
+
+    // store it for visualization
+    pose_msg.pose.position.x = curr_pose.x;
+    pose_msg.pose.position.y = curr_pose.y;
+    pose_msg.pose.position.z = 0.01;
+    arc_pts_msg.poses.push_back(pose_msg);
+
+    // check for collision at the projected pose
+    if (inCollision(curr_pose.x, curr_pose.y, curr_pose.theta)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool DexController::inCollision(
+  const double & x,
+  const double & y,
+  const double & theta)
+{
+  unsigned int mx, my;
+
+  if (!costmap_->worldToMap(x, y, mx, my)) {
+    RCLCPP_WARN_THROTTLE(
+      logger_, *(clock_), 30000,
+      "The dimensions of the costmap is too small to successfully check for "
+      "collisions as far ahead as requested. Proceed at your own risk, slow the robot, or "
+      "increase your costmap size.");
+    return false;
+  }
+
+  double footprint_cost = collision_checker_->footprintCostAtPose(
+    x, y, theta, costmap_ros_->getRobotFootprint());
+  if (footprint_cost == static_cast<double>(NO_INFORMATION) &&
+    costmap_ros_->getLayeredCostmap()->isTrackingUnknown())
+  {
+    return false;
+  }
+
+  // if occupied or unknown and not to traverse unknown space
+  return footprint_cost >= static_cast<double>(LETHAL_OBSTACLE);
+}
+
 geometry_msgs::msg::TwistStamped DexController::computeVelocityCommands(
   const geometry_msgs::msg::PoseStamped & pose, const geometry_msgs::msg::Twist & velocity,
   nav2_core::GoalChecker * /*goal_checker*/)
@@ -380,6 +479,12 @@ geometry_msgs::msg::TwistStamped DexController::computeVelocityCommands(
   }
 
   RCLCPP_INFO( logger_, "Goal dist: %f, Linear Velocity: %f, Angular Velocity: %f" , goal_dist2, linear_vel, angular_vel);
+
+  // Collision checking on this velocity heading
+  const double & goal_dist = hypot(goal_pose.pose.position.x, goal_pose.pose.position.y);
+  if (use_collision_detection_ && isCollisionImminent(pose, linear_vel, angular_vel, goal_dist)) {
+    throw nav2_core::PlannerException("DexController detected collision ahead!");
+  }
 
   // populate and return message
   geometry_msgs::msg::TwistStamped cmd_vel;

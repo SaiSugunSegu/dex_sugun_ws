@@ -968,9 +968,13 @@ CMakeFiles/dex_controller.dir/src/dex_controller.cpp.o: /home/mz/auto-exercise/d
   /opt/ros/humble/include/geometry_msgs/geometry_msgs/msg/detail/twist_with_covariance__traits.hpp \
   /opt/ros/humble/include/nav2_util/node_utils.hpp \
   /opt/ros/humble/include/nav2_util/geometry_utils.hpp \
+  /opt/ros/humble/include/nav2_costmap_2d/footprint_collision_checker.hpp \
+  /opt/ros/humble/include/nav2_util/robot_utils.hpp \
   /opt/ros/humble/include/nav2_core/exceptions.hpp \
   /opt/ros/humble/include/nav2_costmap_2d/costmap_filters/filter_values.hpp
 
+
+/opt/ros/humble/include/nav2_util/robot_utils.hpp:
 
 /opt/ros/humble/include/nav2_util/geometry_utils.hpp:
 
@@ -1289,6 +1293,8 @@ CMakeFiles/dex_controller.dir/src/dex_controller.cpp.o: /home/mz/auto-exercise/d
 /opt/ros/humble/include/nav2_msgs/nav2_msgs/msg/detail/costmap_meta_data__traits.hpp:
 
 /opt/ros/humble/include/nav2_msgs/nav2_msgs/msg/detail/costmap__struct.hpp:
+
+/opt/ros/humble/include/nav2_costmap_2d/footprint_collision_checker.hpp:
 
 /opt/ros/humble/include/map_msgs/map_msgs/msg/detail/occupancy_grid_update__traits.hpp:
 

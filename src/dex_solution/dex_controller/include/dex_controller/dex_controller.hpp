@@ -18,6 +18,8 @@
 #include "rclcpp/rclcpp.hpp"
 #include "nav2_util/odometry_utils.hpp"
 #include "nav2_util/geometry_utils.hpp"
+#include "nav2_costmap_2d/footprint_collision_checker.hpp"
+
 
 
 
@@ -108,6 +110,7 @@ protected:
   std::shared_ptr<tf2_ros::Buffer> tf_;
   std::string plugin_name_;
   std::shared_ptr<nav2_costmap_2d::Costmap2DROS> costmap_ros_;
+  std::unique_ptr<nav2_costmap_2d::FootprintCollisionChecker<nav2_costmap_2d::Costmap2D *>> collision_checker_;
   nav2_costmap_2d::Costmap2D * costmap_;
   rclcpp::Clock::SharedPtr clock_;
 
@@ -136,6 +139,11 @@ protected:
   double cost_scaling_gain_{1.0};
   double cost_scaling_dist_{1.0};
   double inflation_cost_scaling_factor_{1.0};
+
+  bool use_collision_detection_{true};
+  double max_allowed_time_to_collision_up_to_goal_{0.5};
+
+
 
   /**
    * @brief Transforms global plan into same frame as pose and clips poses ineligible for lookaheadPoint
@@ -240,6 +248,32 @@ protected:
     const double & curvature, const geometry_msgs::msg::Twist & speed,
     const double & pose_cost, const nav_msgs::msg::Path & path,
     double & linear_vel, double & sign);
+
+  /**
+   * @brief Whether collision is imminent
+   * @param robot_pose Pose of robot
+   * @param goal_pose Pose of goal
+   * @param linear_vel linear velocity to forward project
+   * @param angular_vel angular velocity to forward project
+   * @param goal_dist Distance to the goal for PP
+   * @return Whether collision is imminent
+   */
+  bool isCollisionImminent(
+    const geometry_msgs::msg::PoseStamped &,
+    const double &, const double &,
+    const double &);
+
+  /**
+   * @brief checks for collision at projected pose
+   * @param x Pose of pose x
+   * @param y Pose of pose y
+   * @param theta orientation of Yaw
+   * @return Whether in collision
+   */
+  bool inCollision(
+    const double & x,
+    const double & y,
+    const double & theta);
 
 };
 

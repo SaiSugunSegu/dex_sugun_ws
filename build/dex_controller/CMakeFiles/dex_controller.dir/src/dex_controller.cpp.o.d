@@ -889,5 +889,7 @@ CMakeFiles/dex_controller.dir/src/dex_controller.cpp.o: \
  /opt/ros/humble/include/geometry_msgs/geometry_msgs/msg/detail/twist_with_covariance__traits.hpp \
  /opt/ros/humble/include/nav2_util/node_utils.hpp \
  /opt/ros/humble/include/nav2_util/geometry_utils.hpp \
+ /opt/ros/humble/include/nav2_costmap_2d/footprint_collision_checker.hpp \
+ /opt/ros/humble/include/nav2_util/robot_utils.hpp \
  /opt/ros/humble/include/nav2_core/exceptions.hpp \
  /opt/ros/humble/include/nav2_costmap_2d/costmap_filters/filter_values.hpp
