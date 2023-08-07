@@ -1,0 +1,36 @@
+[35m[1mConsolidate compiler generated dependencies of target dex_controller[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/dex_controller.dir/src/dex_controller.cpp.o[0m
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In member function ‘[01m[Kbool dex_controller::DexController::transformPose(std::string, const PoseStamped&, geometry_msgs::msg::PoseStamped&) const[m[K’:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:53:46:[m[K [01;31m[Kerror: [m[K‘[01m[Ktransform_tolerance_[m[K’ was not declared in this scope
+   53 |     tf_->transform(in_pose, out_pose, frame, [01;31m[Ktransform_tolerance_[m[K);
+      |                                              [01;31m[K^~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In member function ‘[01m[Knav_msgs::msg::Path dex_controller::DexController::transformGlobalPlan(const PoseStamped&)[m[K’:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:71:16:[m[K [01;31m[Kerror: [m[K‘[01m[Knav2_util::geometry_utils[m[K’ has not been declared
+   71 |     nav2_util::[01;31m[Kgeometry_utils[m[K::min_by(
+      |                [01;31m[K^~~~~~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:72:33:[m[K [01;31m[Kerror: [m[K‘[01m[Kclosest_pose_upper_bound[m[K’ was not declared in this scope
+   72 |     global_plan_.poses.begin(), [01;31m[Kclosest_pose_upper_bound[m[K,
+      |                                 [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:73:7:[m[K [01;31m[Kerror: [m[K‘[01m[Krobot_pose[m[K’ was not declared in this scope
+   73 |     [&[01;31m[Krobot_pose[m[K](const geometry_msgs::msg::PoseStamped & ps) {
+      |       [01;31m[K^~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In lambda function:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:74:33:[m[K [01;31m[Kerror: [m[K‘[01m[Krobot_pose[m[K’ is not captured
+   74 |       return euclidean_distance([01;31m[Krobot_pose[m[K, ps);
+      |                                 [01;31m[K^~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:73:17:[m[K [01;36m[Knote: [m[Kthe lambda has no capture-default
+   73 |     [&robot_pose[01;36m[K][m[K(const geometry_msgs::msg::PoseStamped & ps) {
+      |                 [01;36m[K^[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:73:7:[m[K [01;36m[Knote: [m[K‘[01m[K<typeprefixerror>robot_pose[m[K’ declared here
+   73 |     [&[01;36m[Krobot_pose[m[K](const geometry_msgs::msg::PoseStamped & ps) {
+      |       [01;36m[K^~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:74:14:[m[K [01;31m[Kerror: [m[K‘[01m[Keuclidean_distance[m[K’ was not declared in this scope
+   74 |       return [01;31m[Keuclidean_distance[m[K(robot_pose, ps);
+      |              [01;31m[K^~~~~~~~~~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In lambda function:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:81:53:[m[K [01;31m[Kerror: [m[K‘[01m[Kmax_costmap_extent[m[K’ was not declared in this scope
+   81 |       return euclidean_distance(pose, robot_pose) > [01;31m[Kmax_costmap_extent[m[K;
+      |                                                     [01;31m[K^~~~~~~~~~~~~~~~~~[m[K
+gmake[2]: *** [CMakeFiles/dex_controller.dir/build.make:76: CMakeFiles/dex_controller.dir/src/dex_controller.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/dex_controller.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

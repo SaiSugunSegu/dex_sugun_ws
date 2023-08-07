@@ -1,0 +1,1 @@
+/home/mz/auto-exercise/dex_sugun_ws/build/dex_controller/ament_cmake_environment_hooks/local_setup.bash

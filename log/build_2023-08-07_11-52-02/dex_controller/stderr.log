@@ -1,0 +1,94 @@
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In member function ‘[01m[Kvirtual void dex_controller::DexController::configure(const WeakPtr&, std::string, std::shared_ptr<tf2_ros::Buffer>, std::shared_ptr<nav2_costmap_2d::Costmap2DROS>)[m[K’:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:16:3:[m[K [01;31m[Kerror: [m[K‘[01m[Knode_[m[K’ was not declared in this scope; did you mean ‘[01m[Knode[m[K’?
+   16 |   [01;31m[Knode_[m[K = parent;
+      |   [01;31m[K^~~~~[m[K
+      |   [32m[Knode[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:18:3:[m[K [01;31m[Kerror: [m[K‘[01m[Kcostmap_ros_[m[K’ was not declared in this scope; did you mean ‘[01m[Kcostmap_ros[m[K’?
+   18 |   [01;31m[Kcostmap_ros_[m[K = costmap_ros;
+      |   [01;31m[K^~~~~~~~~~~~[m[K
+      |   [32m[Kcostmap_ros[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:19:3:[m[K [01;31m[Kerror: [m[K‘[01m[Kcostmap_[m[K’ was not declared in this scope; did you mean ‘[01m[Kcostmap_ros[m[K’?
+   19 |   [01;31m[Kcostmap_[m[K = costmap_ros_->getCostmap();
+      |   [01;31m[K^~~~~~~~[m[K
+      |   [32m[Kcostmap_ros[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:20:3:[m[K [01;31m[Kerror: [m[K‘[01m[Ktf_[m[K’ was not declared in this scope; did you mean ‘[01m[Ktf2[m[K’?
+   20 |   [01;31m[Ktf_[m[K = tf;
+      |   [01;31m[K^~~[m[K
+      |   [32m[Ktf2[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:21:3:[m[K [01;31m[Kerror: [m[K‘[01m[Kplugin_name_[m[K’ was not declared in this scope
+   21 |   [01;31m[Kplugin_name_[m[K = name;
+      |   [01;31m[K^~~~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:23:3:[m[K [01;31m[Kerror: [m[K‘[01m[Kclock_[m[K’ was not declared in this scope; did you mean ‘[01m[Kclock_t[m[K’?
+   23 |   [01;31m[Kclock_[m[K = node->get_clock();
+      |   [01;31m[K^~~~~~[m[K
+      |   [32m[Kclock_t[m[K
+In file included from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/logging.hpp:24[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp_lifecycle/rclcpp_lifecycle/lifecycle_node.hpp:55[m[K,
+                 from [01m[K/opt/ros/humble/include/nav2_costmap_2d/costmap_2d_publisher.hpp:46[m[K,
+                 from [01m[K/opt/ros/humble/include/nav2_costmap_2d/costmap_2d_ros.hpp:48[m[K,
+                 from [01m[K/opt/ros/humble/include/nav2_core/controller.hpp:42[m[K,
+                 from [01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/include/dex_controller/dex_controller.hpp:10[m[K,
+                 from [01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:3[m[K:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In member function ‘[01m[Kvirtual void dex_controller::DexController::cleanup()[m[K’:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:28:93:[m[K [01;31m[Kerror: [m[K‘[01m[Kplugin_name_[m[K’ was not declared in this scope
+   28 | O( logger_, "Cleaning up controller: %s of type dex_controller::DexController", [01;31m[Kplugin_name_[m[K.c_str());
+      |                                                                                 [01;31m[K^~~~~~~~~~~~[m[K
+
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In member function ‘[01m[Kvirtual void dex_controller::DexController::activate()[m[K’:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:33:92:[m[K [01;31m[Kerror: [m[K‘[01m[Kplugin_name_[m[K’ was not declared in this scope
+   33 | FO( logger_, "Activating controller: %s of type dex_controller::DexController", [01;31m[Kplugin_name_[m[K.c_str());
+      |                                                                                 [01;31m[K^~~~~~~~~~~~[m[K
+
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In member function ‘[01m[Kvirtual void dex_controller::DexController::deactivate()[m[K’:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:38:94:[m[K [01;31m[Kerror: [m[K‘[01m[Kplugin_name_[m[K’ was not declared in this scope
+   38 | ( logger_, "Deactivating controller: %s of type dex_controller::DexController", [01;31m[Kplugin_name_[m[K.c_str());
+      |                                                                                 [01;31m[K^~~~~~~~~~~~[m[K
+
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In member function ‘[01m[Kbool dex_controller::DexController::transformPose(std::string, const PoseStamped&, geometry_msgs::msg::PoseStamped&) const[m[K’:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:53:5:[m[K [01;31m[Kerror: [m[K‘[01m[Ktf_[m[K’ was not declared in this scope; did you mean ‘[01m[Ktf2[m[K’?
+   53 |     [01;31m[Ktf_[m[K->transform(in_pose, out_pose, frame, transform_tolerance_);
+      |     [01;31m[K^~~[m[K
+      |     [32m[Ktf2[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:53:46:[m[K [01;31m[Kerror: [m[K‘[01m[Ktransform_tolerance_[m[K’ was not declared in this scope
+   53 |     tf_->transform(in_pose, out_pose, frame, [01;31m[Ktransform_tolerance_[m[K);
+      |                                              [01;31m[K^~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In member function ‘[01m[Knav_msgs::msg::Path dex_controller::DexController::transformGlobalPlan(const PoseStamped&)[m[K’:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:71:16:[m[K [01;31m[Kerror: [m[K‘[01m[Knav2_util::geometry_utils[m[K’ has not been declared
+   71 |     nav2_util::[01;31m[Kgeometry_utils[m[K::min_by(
+      |                [01;31m[K^~~~~~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:72:33:[m[K [01;31m[Kerror: [m[K‘[01m[Kclosest_pose_upper_bound[m[K’ was not declared in this scope
+   72 |     global_plan_.poses.begin(), [01;31m[Kclosest_pose_upper_bound[m[K,
+      |                                 [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:73:7:[m[K [01;31m[Kerror: [m[K‘[01m[Krobot_pose[m[K’ was not declared in this scope
+   73 |     [&[01;31m[Krobot_pose[m[K](const geometry_msgs::msg::PoseStamped & ps) {
+      |       [01;31m[K^~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In lambda function:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:74:33:[m[K [01;31m[Kerror: [m[K‘[01m[Krobot_pose[m[K’ is not captured
+   74 |       return euclidean_distance([01;31m[Krobot_pose[m[K, ps);
+      |                                 [01;31m[K^~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:73:17:[m[K [01;36m[Knote: [m[Kthe lambda has no capture-default
+   73 |     [&robot_pose[01;36m[K][m[K(const geometry_msgs::msg::PoseStamped & ps) {
+      |                 [01;36m[K^[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:73:7:[m[K [01;36m[Knote: [m[K‘[01m[K<typeprefixerror>robot_pose[m[K’ declared here
+   73 |     [&[01;36m[Krobot_pose[m[K](const geometry_msgs::msg::PoseStamped & ps) {
+      |       [01;36m[K^~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:74:14:[m[K [01;31m[Kerror: [m[K‘[01m[Keuclidean_distance[m[K’ was not declared in this scope
+   74 |       return [01;31m[Keuclidean_distance[m[K(robot_pose, ps);
+      |              [01;31m[K^~~~~~~~~~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In lambda function:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:81:53:[m[K [01;31m[Kerror: [m[K‘[01m[Kmax_costmap_extent[m[K’ was not declared in this scope
+   81 |       return euclidean_distance(pose, robot_pose) > [01;31m[Kmax_costmap_extent[m[K;
+      |                                                     [01;31m[K^~~~~~~~~~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In lambda function:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:90:21:[m[K [01;31m[Kerror: [m[K‘[01m[Kcostmap_ros_[m[K’ was not declared in this scope
+   90 |       transformPose([01;31m[Kcostmap_ros_[m[K->getBaseFrameID(), stamped_pose, transformed_pose);
+      |                     [01;31m[K^~~~~~~~~~~~[m[K
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:[m[K In member function ‘[01m[Knav_msgs::msg::Path dex_controller::DexController::transformGlobalPlan(const PoseStamped&)[m[K’:
+[01m[K/home/mz/auto-exercise/dex_sugun_ws/src/dex_solution/dex_controller/src/dex_controller.cpp:101:38:[m[K [01;31m[Kerror: [m[K‘[01m[Kcostmap_ros_[m[K’ was not declared in this scope
+  101 |   transformed_plan.header.frame_id = [01;31m[Kcostmap_ros_[m[K->getBaseFrameID();
+      |                                      [01;31m[K^~~~~~~~~~~~[m[K
+gmake[2]: *** [CMakeFiles/dex_controller.dir/build.make:76: CMakeFiles/dex_controller.dir/src/dex_controller.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/dex_controller.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

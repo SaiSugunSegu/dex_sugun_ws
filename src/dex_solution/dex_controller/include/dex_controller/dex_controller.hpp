@@ -5,6 +5,10 @@
 
 #include <string>
 #include <memory>
+#include <algorithm>
+#include <mutex>
+#include <vector>
+
 
 #include "geometry_msgs/msg/pose2_d.hpp"
 #include "nav2_core/controller.hpp"
@@ -12,6 +16,10 @@
 #include "pluginlib/class_list_macros.hpp"
 #include "pluginlib/class_loader.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "nav2_util/odometry_utils.hpp"
+#include "nav2_util/geometry_utils.hpp"
+
+
 
 namespace dex_controller
 {
@@ -95,6 +103,44 @@ public:
 protected:
   rclcpp::Logger logger_{rclcpp::get_logger("DexController")};
   nav_msgs::msg::Path global_plan_;
+
+  rclcpp_lifecycle::LifecycleNode::WeakPtr node_;
+  std::shared_ptr<tf2_ros::Buffer> tf_;
+  std::string plugin_name_;
+  std::shared_ptr<nav2_costmap_2d::Costmap2DROS> costmap_ros_;
+  nav2_costmap_2d::Costmap2D * costmap_;
+  rclcpp::Clock::SharedPtr clock_;
+
+  tf2::Duration transform_tolerance_;
+  double max_robot_pose_search_dist_ = 5;
+
+  /**
+   * @brief Transforms global plan into same frame as pose and clips poses ineligible for lookaheadPoint
+   * Points ineligible to be selected as a lookahead point if they are any of the following:
+   * - Outside the local_costmap (collision avoidance cannot be assured)
+   * @param pose pose to transform
+   * @return Path in new frame
+   */
+  nav_msgs::msg::Path transformGlobalPlan( const geometry_msgs::msg::PoseStamped & pose);
+
+  /**
+   * @brief Transform a pose to another frame.
+   * @param frame Frame ID to transform to
+   * @param in_pose Pose input to transform
+   * @param out_pose transformed output
+   * @return bool if successful
+   */
+  bool transformPose(
+    const std::string frame,
+    const geometry_msgs::msg::PoseStamped & in_pose,
+    geometry_msgs::msg::PoseStamped & out_pose) const;
+  
+  /**
+   * Get the greatest extent of the costmap in meters from the center.
+   * @return max of distance from center in meters to edge of costmap
+   */
+  double getCostmapMaxExtent() const;
+
 };
 
 }  // namespace dex_controller
