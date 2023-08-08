@@ -39,11 +39,13 @@ ros2 launch dex_bringup tb3_simulation_launch.py
 ```
 
 Results:
-### Rviz window will be poped up, with Turtlebot Localized in Gazebo world map.
+### When you run the launch file, Rviz window will be poped up, with Turtlebot Localized in Gazebo world map.
 
 - Give a Nav2_goal pose.
-- Turtlebot should be able to reach Goal pose.
+- Turtlebot should be able to reach Goal pose with given features mentioned in Assignment.
 
-- #GIF
+<p align="center">
+  <img src="https://github.com/SaiSugunSegu/dex_sugun_ws/assets/50354583/6a45b210-3cb2-4975-935f-3f561110215d">
+</p>
 
 _Note: Please find more about algorithm and implementation in readme.md_
