@@ -38,7 +38,7 @@ source install/setup.bash
 ros2 launch dex_bringup tb3_simulation_launch.py
 ```
 
-Results:
+## Results:
 ### When you run the launch file, Rviz window will be poped up, with Turtlebot Localized in Gazebo world map.
 
 - Give a Nav2_goal pose.
