@@ -10,9 +10,10 @@ Create a Custom Controller plugin, which generates Control Commands (Linear and 
 - In this Assignment, we will be using Pure Pursuit and adopting it to 2D Turtlebot, and adding more features from Regulated Pure Pursuit to improve the performance.
 
 ## Before Implementing the algorithm:
-- Creating the custom plugin using [tutorial](https://navigation.ros.org/plugin_tutorials/docs/writing_new_nav2controller_plugin.html). Follows steps
-  - Create Plugin with neccesary virtual functions of base class, so that these methods can be called at runtime by the controller server.
-  - Export Plugin using pluginlib `PLUGINLIB_EXPORT_CLASS` and plugin description file `controller.xml`, with neccesary changes in Cmakelist.txt and package.xml
+- Create the custom plugin using [tutorial](https://navigation.ros.org/plugin_tutorials/docs/writing_new_nav2controller_plugin.html).
+- Follow the steps
+  - Create a Plugin with the necessary virtual functions of the base class, so that these methods can be called at runtime by the controller server.
+  - Export Plugin using pluginlib `PLUGINLIB_EXPORT_CLASS` and plugin description file `controller.xml`, with necessary changes in Cmakelist.txt and package.xml
   - Create param.yaml file to feed the parameters to the plugin.
 
 
@@ -24,7 +25,7 @@ Create a Custom Controller plugin, which generates Control Commands (Linear and 
   <img src="https://github.com/SaiSugunSegu/dex_sugun_ws/assets/50354583/4712a25c-6fed-4cd1-b50c-f21ea9af4261" />
 </p>
 
-rather than calculating the steering angle to reach the goal point using a kinematic bicycle model, we can adapt the same to Turtlebot.  
+- Rather than calculating the steering angle to reach the goal point using a kinematic bicycle model, we can adapt the same to Turtlebot.  
 
 ## Adaptation of Pure Pursuit to 2D Turtle bot:
 In this assignment, we will be transforming the global path into a local robot frame, here is the math behind Geometrical Calculating Curvature.
@@ -44,7 +45,7 @@ So, we will calculate this curvature to generate Angular velocity (assuming Line
 ## Methodology:
 ### Step 1: Transform Global Waypoints into Local Robot frame
 - Find the Closest Pose Upper Bound to create a Local Cost Map.
-- Transform the near part of the global plan into the robot's frame of reference.
+- Transform the nearest section of the global path into the robot's frame of reference.
 - Path Pruning: Remove the portion of the global plan that we've already passed.
 
 ### Step 2: Finding Lookahead Point
