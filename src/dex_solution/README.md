@@ -95,8 +95,8 @@ __Note:__ _Apply Control Commands to the robot and repeat till it reaches the fi
 ### Step 6: Regulation on Collision Check
 - Calculate projection time using simple ${CostResolution (unit dist) \over Velocity}$
 - Calculate possible future poses using a motion model
-  - $x =  dt * (vel * yaw)$
-  - $y =  dt * (vel * yaw)$
+  - $dx =  dt * (vel * cos(yaw))$
+  - $dy =  dt * (vel * sin(yaw))$
 - Check the `footprint_cost` of those future potential poses to estimate collision.
 
 
